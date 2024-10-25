@@ -10,7 +10,7 @@ exports.signup = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessages = errors.array().map((error) => error.msg);
-    return res.status(400).json({ errors: errorMessages });
+    return res.json({ errors: errorMessages });
   }
 
   try {
@@ -73,14 +73,14 @@ exports.login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessages = errors.array().map((error) => error.msg);
-    return res.status(400).json({ errors: errorMessages });
+    return res.json({ errors: errorMessages });
   }
 
   try {
     const userQuery = `SELECT * FROM user WHERE email = ?`;
     db.query(userQuery, [email], async (error, results) => {
       if (error) {
-        return res.status(500).json({
+        return res.json({
           status: "Error",
           message: "Database error",
           error: error.message,
@@ -88,18 +88,20 @@ exports.login = async (req, res) => {
       }
 
       if (results.length === 0) {
-        return res
-          .status(400)
-          .json({ status: "Error", message: "Invalid email or password" });
+        return res.json({
+          status: "Error",
+          message: "Invalid email or password",
+        });
       }
 
       const user = results[0];
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        return res
-          .status(400)
-          .json({ status: "Error", message: "Invalid email or password" });
+        return res.json({
+          status: "Error",
+          message: "Invalid email or password",
+        });
       }
 
       // Generate JWT token

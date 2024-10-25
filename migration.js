@@ -17,8 +17,8 @@ const createMovieTable = `
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )`;
 
-async function runMigration() {
-  db.query(createUserTable, (error, result) => {
+const runMigration = async () => {
+  db.query(createUserTable, (error) => {
     if (error) {
       console.error("Error creating user table:", error.message);
     } else {
@@ -26,7 +26,7 @@ async function runMigration() {
     }
   });
 
-  db.query(createMovieTable, (error, result) => {
+  db.query(createMovieTable, (error) => {
     if (error) {
       console.error("Error creating movie table:", error.message);
     } else {
@@ -35,6 +35,6 @@ async function runMigration() {
   });
 
   db.end();
-}
+};
 
-runMigration();
+module.exports = runMigration;

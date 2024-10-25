@@ -81,16 +81,16 @@ exports.editMovie = async (req, res) => {
     const { title, publishing_year } = req.body;
     const newPicture = req.file ? req.file.filename : null;
 
-    if (
-      !title ||
-      !publishing_year ||
-      (newPicture && !/^\d{4}$/.test(publishing_year))
-    ) {
-      return res.status(400).json({
-        status: "Error",
-        message: "Invalid input, all fields required",
-      });
-    }
+    // if (
+    //   !title ||
+    //   !publishing_year ||
+    //   (newPicture && !/^\d{4}$/.test(publishing_year))
+    // ) {
+    //   return res.status(400).json({
+    //     status: "Error",
+    //     message: "Invalid input, all fields required",
+    //   });
+    // }
 
     try {
       const fetchMovieQuery = `SELECT image_url FROM movie_data WHERE id = ?`;

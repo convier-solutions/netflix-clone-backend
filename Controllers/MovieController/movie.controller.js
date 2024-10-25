@@ -152,3 +152,33 @@ exports.editMovie = async (req, res) => {
     }
   });
 };
+
+// Listing Movie
+exports.listMovie = async (req, res) => {
+  try {
+    const listQuery = `SELECT * FROM movie_data`;
+    db.query(listQuery, (err, result) => {
+      if (err) {
+        return res.json({
+          status: "Error",
+          message: "Database Error",
+        });
+      }
+
+      return res.status(200).json({
+        status: "Success",
+        message: "Successfully fetch all movies data",
+        data: [
+          {
+            result,
+          },
+        ],
+      });
+    });
+  } catch (error) {
+    return res.json({
+      success: "Error",
+      message: "Internal Server Error",
+    });
+  }
+};

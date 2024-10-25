@@ -4,7 +4,7 @@ const { upload, unlinkImage } = require("../../Middleware/multer.config");
 
 // Create Movie API
 exports.createMovie = async (req, res) => {
-  upload.single("picture")(req, res, (err) => {
+  upload.single("image")(req, res, (err) => {
     if (err) {
       return res
         .status(400)
@@ -12,10 +12,10 @@ exports.createMovie = async (req, res) => {
     }
 
     const { title, publishing_year } = req.body;
-    const picture = req.file ? req.file.filename : null;
+    const image_url = req.file ? req.file.filename : null;
 
     // Validate fields
-    if (!title || !publishing_year || !picture) {
+    if (!title || !publishing_year || !image_url) {
       return res
         .status(400)
         .json({ status: "Error", message: "All fields are required" });
@@ -29,10 +29,10 @@ exports.createMovie = async (req, res) => {
     }
 
     try {
-      const insertMovieQuery = `INSERT INTO movie_data (title, picture, publishing_year) VALUES (?, ?, ?)`;
+      const insertMovieQuery = `INSERT INTO movie_data (title, image_url, publishing_year) VALUES (?, ?, ?)`;
       db.query(
         insertMovieQuery,
-        [title, picture, publishing_year],
+        [title, image_url, publishing_year],
         (error, result) => {
           if (error) {
             return res.status(500).json({
@@ -49,7 +49,7 @@ exports.createMovie = async (req, res) => {
               {
                 id: result.insertId,
                 title,
-                picture,
+                image_url,
                 publishing_year,
               },
             ],
@@ -71,7 +71,7 @@ exports.editMovie = async (req, res) => {
   const movieId = req.params.id;
 
   // Use Multer middleware to handle new image uploads
-  upload.single("picture")(req, res, async (err) => {
+  upload.single("image")(req, res, async (err) => {
     if (err) {
       return res
         .status(400)
@@ -93,7 +93,7 @@ exports.editMovie = async (req, res) => {
     }
 
     try {
-      const fetchMovieQuery = `SELECT picture FROM movie_data WHERE id = ?`;
+      const fetchMovieQuery = `SELECT image_url FROM movie_data WHERE id = ?`;
       const oldPicture = await new Promise((resolve, reject) => {
         db.query(fetchMovieQuery, [movieId], (error, results) => {
           if (error) {
@@ -106,13 +106,13 @@ exports.editMovie = async (req, res) => {
           if (results.length === 0) {
             return reject({ status: 404, message: "Movie not found" });
           }
-          resolve(results[0].picture);
+          resolve(results[0].image_url);
         });
       });
 
       // Update movie data with the new fields
       const updatedFields = { title, publishing_year };
-      if (newPicture) updatedFields.picture = newPicture;
+      if (newPicture) updatedFields.image_url = newPicture;
 
       const fields = Object.keys(updatedFields)
         .map((field) => `${field} = ?`)
@@ -142,7 +142,7 @@ exports.editMovie = async (req, res) => {
               id: movieId,
               title,
               publishing_year,
-              picture: newPicture || oldPicture,
+              image_url: newPicture || oldPicture,
             },
           ],
         });

@@ -13,6 +13,7 @@ app.use(
     origin: "http://localhost:3000",
   })
 );
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api", userRoute);
 app.use("/api", movieRoute);

@@ -168,11 +168,7 @@ exports.listMovie = async (req, res) => {
       return res.status(200).json({
         status: "Success",
         message: "Successfully fetch all movies data",
-        data: [
-          {
-            result,
-          },
-        ],
+        data: result ?? [],
       });
     });
   } catch (error) {

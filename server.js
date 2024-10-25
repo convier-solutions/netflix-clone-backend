@@ -8,7 +8,11 @@ const movieRoute = require("./Routes/MovieRoute/movie.route");
 
 app.use(express.json());
 dotenv.config();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 app.use("/api", userRoute);
 app.use("/api", movieRoute);

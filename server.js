@@ -5,7 +5,7 @@ const cors = require("cors");
 const { connectDb } = require("./Config/dbConnection");
 const userRoute = require("./Routes/UserRoute/user.route");
 const movieRoute = require("./Routes/MovieRoute/movie.route");
-const runMigration = require("./migration");
+// const runMigration = require("./migration");
 
 app.use(express.json());
 dotenv.config();
@@ -24,5 +24,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
   connectDb();
-  runMigration();
+  // runMigration();
 });
